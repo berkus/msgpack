@@ -6,7 +6,7 @@ MessagePack cross-language test cases
 Valid serialized data are stored in "cases.mpac" and "cases_compact.mpac".
 These files describe same objects. And "cases.json" describes an array of the described objects.
 
-Thus you can verify your implementations as comparing the objects.
+Thus you can verify your implementations by comparing the objects.
 
 
 ## crosslang
