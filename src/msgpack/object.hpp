@@ -74,7 +74,6 @@ struct object {
 		object_array array;
 		object_map map;
 		object_raw raw;
-		object_raw ref;  // obsolete
 	};
 
 	type::object_type type;
@@ -165,29 +164,6 @@ struct object::implicit_type {
 
 private:
 	object obj;
-};
-
-
-// obsolete
-template <typename Type>
-class define : public Type {
-public:
-	typedef Type msgpack_type;
-	typedef define<Type> define_type;
-
-	define() {}
-	define(const msgpack_type& v) : msgpack_type(v) {}
-
-	template <typename Packer>
-	void msgpack_pack(Packer& o) const
-	{
-		o << static_cast<const msgpack_type&>(*this);
-	}
-
-	void msgpack_unpack(object o)
-	{
-		o >> static_cast<msgpack_type&>(*this);
-	}
 };
 
 
@@ -321,28 +297,6 @@ inline object::operator msgpack_object() const
 	msgpack_object obj;
 	::memcpy(&obj, this, sizeof(obj));
 	return obj;
-}
-
-
-// obsolete
-template <typename T>
-inline void convert(T& v, object o)
-{
-	o.convert(&v);
-}
-
-// obsolete
-template <typename Stream, typename T>
-inline void pack(packer<Stream>& o, const T& v)
-{
-	o.pack(v);
-}
-
-// obsolete
-template <typename Stream, typename T>
-inline void pack_copy(packer<Stream>& o, T v)
-{
-	pack(o, v);
 }
 
 
