@@ -165,23 +165,6 @@ static void unpack(unpacked* result,
 		const char* data, size_t len, size_t* offset = NULL);
 
 
-// obsolete
-typedef enum {
-	UNPACK_SUCCESS				=  2,
-	UNPACK_EXTRA_BYTES			=  1,
-	UNPACK_CONTINUE				=  0,
-	UNPACK_PARSE_ERROR			= -1,
-} unpack_return;
-
-// obsolete
-static unpack_return unpack(const char* data, size_t len, size_t* off,
-		zone* z, object* result);
-
-
-// obsolete
-static object unpack(const char* data, size_t len, zone& z, size_t* off = NULL);
-
-
 inline unpacker::unpacker(size_t initial_buffer_size)
 {
 	if(!msgpack_unpacker_init(this, initial_buffer_size)) {
@@ -332,41 +315,6 @@ inline void unpack(unpacked* result,
 		throw unpack_error("parse error");
 	}
 }
-
-
-// obsolete
-inline unpack_return unpack(const char* data, size_t len, size_t* off,
-		zone* z, object* result)
-{
-	return (unpack_return)msgpack_unpack(data, len, off,
-			z, reinterpret_cast<msgpack_object*>(result));
-}
-
-// obsolete
-inline object unpack(const char* data, size_t len, zone& z, size_t* off)
-{
-	object result;
-
-	switch( msgpack::unpack(data, len, off, &z, &result) ) {
-	case UNPACK_SUCCESS:
-		return result;
-
-	case UNPACK_EXTRA_BYTES:
-		if(off) {
-			return result;
-		} else {
-			throw unpack_error("extra bytes");
-		}
-
-	case UNPACK_CONTINUE:
-		throw unpack_error("insufficient bytes");
-
-	case UNPACK_PARSE_ERROR:
-	default:
-		throw unpack_error("parse error");
-	}
-}
-
 
 }  // namespace msgpack
 
