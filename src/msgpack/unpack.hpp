@@ -165,6 +165,14 @@ static void unpack(unpacked* result,
 		const char* data, size_t len, size_t* offset = NULL);
 
 
+// obsolete
+typedef enum {
+	UNPACK_SUCCESS				=  2,
+	UNPACK_EXTRA_BYTES			=  1,
+	UNPACK_CONTINUE				=  0,
+	UNPACK_PARSE_ERROR			= -1,
+} unpack_return;
+
 inline unpacker::unpacker(size_t initial_buffer_size)
 {
 	if(!msgpack_unpacker_init(this, initial_buffer_size)) {
